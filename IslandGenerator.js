@@ -55,7 +55,10 @@ export default class Island{
 						if(!this.trees[strCoords(i-1, j)] && 
 							!this.trees[strCoords(i, j-1)] &&
 							!this.trees[strCoords(i-1, j-1)] &&
-							!this.trees[strCoords(i+1, j-1)]){
+							!this.trees[strCoords(i-1, j+1)]){
+
+							console.log(i+1, j-1)
+
 							this.trees[strCoords(i, j)] = 1
 						}
 					}
