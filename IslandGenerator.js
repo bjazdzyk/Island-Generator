@@ -7,6 +7,7 @@ function strCoords(x, y){
 }
 
 noise.seed(Math.random())
+
 export default class Island{
 	constructor(){
 		this.tileMap = {
@@ -16,8 +17,8 @@ export default class Island{
 			3:'darkgreen'
 		}
 
-		this.sFactor = 10
-		this.bigSFactor = 30
+		this.sFactor = 20
+		this.bigSFactor = 20
 		this.size = 100
 		
 
@@ -29,6 +30,7 @@ export default class Island{
 	build(){
 
 		this.map = {}
+		this.trees = {}
 
 		for(let i=0; i<this.size; i++){
 			for(let j=0; j<this.size; j++){
@@ -39,12 +41,27 @@ export default class Island{
 				const dx = Math.abs(R-i)
 				const dy = Math.abs(R-j)
 				const r = Math.sqrt(dx*dx + dy*dy)
-				const h = ((R-r)/R)*3+(S*0.75+s*0.25)
-				
-				const v = (Math.floor(h))
-				
+				const h = ((R-r)/R)*5+(S*0.75+s*0.25)
+				const v = Math.min(Math.max(Math.floor(h), 0), 3)
 
-				this.map[strCoords(i, j)] = Math.min(Math.max(v, 0), 4)
+				this.map[strCoords(i, j)] = v
+
+				const sOff = this.size*10
+				const tOff = 30
+				const ts = noise.simplex2((i+sOff)/tOff, j/tOff)+0.5
+
+				if(ts*10000%10 > 9.5){
+					if(v >= 2){
+						if(!this.trees[strCoords(i-1, j)] && 
+							!this.trees[strCoords(i, j-1)] &&
+							!this.trees[strCoords(i-1, j-1)] &&
+							!this.trees[strCoords(i+1, j-1)]){
+							this.trees[strCoords(i, j)] = 1
+						}
+					}
+				}
+
+
 			}
 		}
 

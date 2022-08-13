@@ -23,6 +23,13 @@ function drawIs(island, tileSize){
 			}else{
 				ctx.fillStyle = 'black'
 			}
+
+			if(island.trees[strCoords(i, j)]){
+				ctx.fillStyle = 'brown'
+				///console.log(island.trees[strCoords(i, j)])
+				
+			}
+
 			ctx.fillRect(i*tileSize, j*tileSize, tileSize, tileSize)
 
 		}
