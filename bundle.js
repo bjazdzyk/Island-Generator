@@ -1,6 +1,9 @@
 import Island from '/IslandGenerator.js'
 
 
+//git test windows
+
+
 const canvas = document.getElementById('can')
 const ctx = canvas.getContext('2d')
 
