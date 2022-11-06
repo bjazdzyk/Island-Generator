@@ -41,7 +41,10 @@ function drawIs(island, tileSize){
 }
 
 
+
 const is = new Island()
+
+console.log(is.bigSFactor, is.sFactor)
 
 drawIs(is, 5)
 

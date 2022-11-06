@@ -17,8 +17,11 @@ export default class Island{
 			3:'darkgreen'
 		}
 
-		this.sFactor = 20
-		this.bigSFactor = 20
+		// this.sFactor = Math.random()*100
+		// this.bigSFactor = Math.random()*100
+		this.sFactor = 80
+		this.bigSFactor = 30
+		
 		this.size = 100
 		
 
@@ -56,8 +59,6 @@ export default class Island{
 							!this.trees[strCoords(i, j-1)] &&
 							!this.trees[strCoords(i-1, j-1)] &&
 							!this.trees[strCoords(i-1, j+1)]){
-
-							console.log(i+1, j-1)
 
 							this.trees[strCoords(i, j)] = 1
 						}
