@@ -1,12 +1,11 @@
-
-//import '/libs/noise.js'
-
-
 function strCoords(x, y){
 	return `${x}:${y}`
 }
 
 noise.seed(Math.random())
+
+let closestStart = 1000000
+let closestDungeon = 100000
 
 export default class Island{
 	constructor(){
@@ -19,10 +18,15 @@ export default class Island{
 
 		// this.sFactor = Math.random()*100
 		// this.bigSFactor = Math.random()*100
-		this.sFactor = 80
-		this.bigSFactor = 30
+
+		this.sFactor = 15
+		this.bigSFactor = 25
 		
-		this.size = 100
+		this.size = 200
+
+		this.spawnH = 1.5
+		this.spawnPoint = {x:this.size/2, y:this.size/2};
+		this.dungeonPos = {x:0, y:0}
 		
 
 
@@ -53,7 +57,7 @@ export default class Island{
 				const tOff = 30
 				const ts = noise.simplex2((i+sOff)/tOff, j/tOff)+0.5
 
-				if(ts*10000%10 > 9.5){
+				if((ts*10000)%10 > 9.5){
 					if(v >= 2){
 						if(!this.trees[strCoords(i-1, j)] && 
 							!this.trees[strCoords(i, j-1)] &&
@@ -62,6 +66,32 @@ export default class Island{
 
 							this.trees[strCoords(i, j)] = 1
 						}
+					}
+				}
+				if((ts*10000)%10 > 9.9){
+					if(v == 1){
+						if(!this.trees[strCoords(i-1, j)] && 
+							!this.trees[strCoords(i, j-1)] &&
+							!this.trees[strCoords(i-1, j-1)] &&
+							!this.trees[strCoords(i-1, j+1)]){
+
+							this.trees[strCoords(i, j)] = 2
+						}
+					}
+				}
+
+				if(ts+r/R < closestDungeon){
+					closestDungeon = ts+r/R
+					console.log(ts, r/R)
+					this.dungeonPos = {x:i, y:j}
+
+				}
+
+				if(Math.abs(i-this.size/2) == Math.abs(j-this.size/2) || i==Math.floor(this.size/2) || j==Math.floor(this.size/2)){
+					if(Math.abs(this.spawnH-h) < closestStart){
+						closestStart = Math.abs(1.5-h)
+
+						this.spawnPoint = {x:i, y:j}
 					}
 				}
 

@@ -32,6 +32,12 @@ function drawIs(island, tileSize){
 				///console.log(island.trees[strCoords(i, j)])
 				
 			}
+			if(island.spawnPoint.x == i && island.spawnPoint.y == j){
+				ctx.fillStyle = 'purple'
+			}
+			if(island.dungeonPos.x == i && island.dungeonPos.y == j){
+				ctx.fillStyle = 'black'
+			}
 
 			ctx.fillRect(i*tileSize, j*tileSize, tileSize, tileSize)
 
@@ -44,10 +50,9 @@ function drawIs(island, tileSize){
 
 const is = new Island()
 
-console.log(is.bigSFactor, is.sFactor)
+console.log(is)
 
 drawIs(is, 5)
-
 
 
 
