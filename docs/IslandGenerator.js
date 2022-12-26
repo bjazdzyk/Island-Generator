@@ -10,10 +10,10 @@ let closestDungeon = 100000
 export default class Island{
 	constructor(){
 		this.tileMap = {
-			0:'blue',
-			1:'yellow',
-			2:'green',
-			3:'darkgreen'
+			0:'sea',
+			1:'sand',
+			2:'plain',
+			3:'hill'
 		}
 
 		// this.sFactor = Math.random()*100
@@ -82,7 +82,6 @@ export default class Island{
 
 				if(ts+r/R < closestDungeon){
 					closestDungeon = ts+r/R
-					console.log(ts, r/R)
 					this.dungeonPos = {x:i, y:j}
 
 				}
@@ -103,5 +102,10 @@ export default class Island{
 
 	getMap(){
 		return this.map
+	}
+
+	getCell(x, y){
+		return this.tileMap[this.map[strCoords(x, y)]]
+
 	}
 }
