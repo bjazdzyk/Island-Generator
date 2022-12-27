@@ -30,12 +30,30 @@ export default class Game{
         this.renderer = new Renderer(this.canvas, this)
 
         this.assets = {}
-        this.assets.palma = new Image()
-        this.assets.palma.src = "/imgs/palma.png"
+        this.assets.palmaTop = new Image()
+        this.assets.palmaTop.src = "/imgs/palmaTop.png"
+        this.assets.palmaDown = new Image()
+        this.assets.palmaDown.src = "/imgs/palmaDown.png"
         this.assets.player = new Image()
         this.assets.player.src = "/imgs/player.png"
+        this.assets.grass = new Image()
+        this.assets.grass.src = "/imgs/grass.png"
+        this.assets.dryBush = new Image()
+        this.assets.dryBush.src = "/imgs/dryBush.png"
+        this.assets.blueFlower = new Image()
+        this.assets.blueFlower.src = "/imgs/blueFlower.png"
+        this.assets.redFlower = new Image()
+        this.assets.redFlower.src = "/imgs/redFlower.png"
+        this.assets.whiteFlower = new Image()
+        this.assets.whiteFlower.src = "/imgs/whiteFlower.png"
+        this.assets.stone = new Image()
+        this.assets.stone.src = "/imgs/stone.png"
+        this.assets.dungeonEntrance = new Image()
+        this.assets.dungeonEntrance.src = "/imgs/dungeonEntrance.png"
+
 
         this.loop(Date.now())
+        console.log(this.island.spawnPoint)
     }
     loop(time){
         let delta = Date.now() - time
@@ -49,6 +67,9 @@ export default class Game{
     }
 
     movementEvents(keys, delta){
+        
+
+
         if(keys['KeyW']){
             this.player.y -= this.player.speed*delta
         }
@@ -80,8 +101,8 @@ class Renderer{
         this.game = game
         this.canvas = canvas
 
-        this.width = 40
-        this.height = 30
+        this.width = 30
+        this.height = 20
 
         this.cellOffsetX = 0
         this.cellOffsetY = 0
@@ -144,17 +165,27 @@ class Renderer{
             }
         }
 
-        //trees
+        //trees down & bush & grass
         for(let j=0; j<=this.height+2; j++){
             for(let i=-1; i<=this.width+1; i++){
                 const x = this.lookAt.x - this.width/2 + i
                 const y = this.lookAt.y - this.height/2 + j
 
-                if(trees[strCoords(x, y)]){
-                    ctx.imageSmoothingEnabled = false;
-                    
-                    ctx.drawImage(this.game.assets.palma, this.LEFT + (i-1)*this.cellSize, this.UP + (j-2)*this.cellSize, this.cellSize*3, this.cellSize*3)
-                    
+                ctx.imageSmoothingEnabled = false;
+                if(trees[strCoords(x, y)] == 1){
+                    ctx.drawImage(this.game.assets.palmaDown, this.LEFT + (i-1)*this.cellSize, this.UP + (j-2)*this.cellSize, this.cellSize*3, this.cellSize*3)
+                }else if(trees[strCoords(x, y)]==2){
+                    ctx.drawImage(this.game.assets.dryBush, this.LEFT + i*this.cellSize, this.UP + j*this.cellSize, this.cellSize, this.cellSize)
+                }else if(trees[strCoords(x, y)]==3){
+                    ctx.drawImage(this.game.assets.grass, this.LEFT + i*this.cellSize, this.UP + j*this.cellSize, this.cellSize, this.cellSize)
+                }else if(trees[strCoords(x, y)]==4){
+                    ctx.drawImage(this.game.assets.blueFlower, this.LEFT + i*this.cellSize, this.UP + j*this.cellSize, this.cellSize, this.cellSize)
+                }else if(trees[strCoords(x, y)]==5){
+                    ctx.drawImage(this.game.assets.redFlower, this.LEFT + i*this.cellSize, this.UP + j*this.cellSize, this.cellSize, this.cellSize)
+                }else if(trees[strCoords(x, y)]==6){
+                    ctx.drawImage(this.game.assets.whiteFlower, this.LEFT + i*this.cellSize, this.UP + j*this.cellSize, this.cellSize, this.cellSize)
+                }else if(trees[strCoords(x, y)]==7){
+                    ctx.drawImage(this.game.assets.stone, this.LEFT + (i-1)*this.cellSize, this.UP + (j-1)*this.cellSize, this.cellSize*3, this.cellSize*3)
                 }
             }
         }
@@ -170,6 +201,24 @@ class Renderer{
         const _dy = this._H/2+(_py-_cy)*this.cellSize
 
         ctx.drawImage(this.game.assets.player, _dx-this.cellSize, _dy-this.cellSize, this.cellSize, this.cellSize)
+
+
+
+        //trees top
+        for(let j=0; j<=this.height+2; j++){
+            for(let i=-1; i<=this.width+1; i++){
+                const x = this.lookAt.x - this.width/2 + i
+                const y = this.lookAt.y - this.height/2 + j
+
+                ctx.imageSmoothingEnabled = false;
+                if(trees[strCoords(x, y)]==1){
+                    
+                    ctx.drawImage(this.game.assets.palmaTop, this.LEFT + (i-1)*this.cellSize, this.UP + (j-2)*this.cellSize, this.cellSize*3, this.cellSize*3)
+                    
+                }
+            }
+        }
+
 
     }
 
@@ -187,11 +236,9 @@ class Player{
 
         this.game = game
 
-        console.log(this.game.island.spawnPoint)
-
         this.x = this.game.island.spawnPoint.x
         this.y = this.game.island.spawnPoint.y
 
-        this.speed = 0.0075
+        this.speed = 0.01
     }
 }

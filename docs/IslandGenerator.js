@@ -19,7 +19,7 @@ export default class Island{
 		this.sFactor = 15
 		this.bigSFactor = 25
 		
-		this.size = 200
+		this.size = 300
 
 		this.spawnH = 1.5
 		this.spawnPoint = {x:this.size/2, y:this.size/2};
@@ -61,9 +61,25 @@ export default class Island{
 					!this.trees[strCoords(i-1, j-1)] &&
 					!this.trees[strCoords(i-1, j+1)]){
 					if(v >= 2){
-						if((ts*10000)%10 > 9.8){
-							this.trees[strCoords(i, j)] = 1
+						if((ts*100)%10 > 9.9){
+							this.trees[strCoords(i, j)] = 1 //tree
 
+						}else if(v==2){
+							if((ts*100)%10 > 8.5){
+								if((ts*1000)%10 > 9){
+									this.trees[strCoords(i, j)] = 4 //blueFlower
+								}else if((ts*1000)%10 > 8){
+									this.trees[strCoords(i, j)] = 5 //redFlower
+								}else if((ts*1000)%10 > 7){
+									this.trees[strCoords(i, j)] = 6 //whiteFlower
+								}else{
+									this.trees[strCoords(i, j)] = 3 //grass
+								}
+							}
+						}else{
+							if((ts*100)%10 < -9.8){
+								this.trees[strCoords(i, j)] = 7 //stone
+							}
 						}
 					}
 					if(v == 1){
@@ -73,7 +89,7 @@ export default class Island{
 								!this.trees[strCoords(i-1, j-1)] &&
 								!this.trees[strCoords(i-1, j+1)]){
 
-								this.trees[strCoords(i, j)] = 2
+								this.trees[strCoords(i, j)] = 2 // dryBush
 							}
 						}
 					}
