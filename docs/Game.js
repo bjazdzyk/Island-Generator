@@ -99,7 +99,18 @@ class Renderer{
 
     }
     update(){
-        this.focus(this.game.player.x, this.game.player.y)
+        const _lx = this.lookAt.x + this.cellOffsetX
+        const _ly = this.lookAt.y + this.cellOffsetY
+
+        const _px = this.game.player.x
+        const _py = this.game.player.y
+
+        const _dx = _px - _lx
+        const _dy = _py - _ly
+
+        this.focus(_lx + _dx/15, _ly + _dy/15)
+
+        
 
         this._W = window.innerWidth
         this._H = window.innerHeight
