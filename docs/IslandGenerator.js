@@ -4,9 +4,6 @@ function strCoords(x, y){
 
 noise.seed(Math.random())
 
-let closestStart = 1000000
-let closestDungeon = 100000
-
 export default class Island{
 	constructor(){
 		this.tileMap = {
@@ -39,6 +36,9 @@ export default class Island{
 		this.map = {}
 		this.trees = {}
 
+		let closestStart = 1000000
+		let closestDungeon = 100000
+
 		for(let i=0; i<this.size; i++){
 			for(let j=0; j<this.size; j++){
 
@@ -56,26 +56,25 @@ export default class Island{
 				const sOff = this.size*10
 				const tOff = 30
 				const ts = noise.simplex2((i+sOff)/tOff, j/tOff)+0.5
-
-				if((ts*10000)%10 > 9.5){
+				if(!this.trees[strCoords(i-1, j)] && 
+					!this.trees[strCoords(i, j-1)] &&
+					!this.trees[strCoords(i-1, j-1)] &&
+					!this.trees[strCoords(i-1, j+1)]){
 					if(v >= 2){
-						if(!this.trees[strCoords(i-1, j)] && 
-							!this.trees[strCoords(i, j-1)] &&
-							!this.trees[strCoords(i-1, j-1)] &&
-							!this.trees[strCoords(i-1, j+1)]){
-
+						if((ts*10000)%10 > 9.8){
 							this.trees[strCoords(i, j)] = 1
+
 						}
 					}
-				}
-				if((ts*10000)%10 > 9.9){
 					if(v == 1){
-						if(!this.trees[strCoords(i-1, j)] && 
-							!this.trees[strCoords(i, j-1)] &&
-							!this.trees[strCoords(i-1, j-1)] &&
-							!this.trees[strCoords(i-1, j+1)]){
+						if((ts*10000)%10 > 9.9){
+							if(!this.trees[strCoords(i-1, j)] && 
+								!this.trees[strCoords(i, j-1)] &&
+								!this.trees[strCoords(i-1, j-1)] &&
+								!this.trees[strCoords(i-1, j+1)]){
 
-							this.trees[strCoords(i, j)] = 2
+								this.trees[strCoords(i, j)] = 2
+							}
 						}
 					}
 				}

@@ -1,4 +1,4 @@
-import Island from '/IslandGenerator.js'
+
 import {drawIs} from '/DebugIsland.js'
 import Game from '/Game.js'
 
@@ -12,10 +12,7 @@ function strCoords(x, y){
 	return `${x}:${y}`
 }
 
-const is = new Island()
-console.log(is)
-
-const game = new Game(canvas, is)
+const game = new Game(canvas)
 
 //drawIs(ctx, is, 5)
 
