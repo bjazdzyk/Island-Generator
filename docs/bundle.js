@@ -8,10 +8,6 @@ import Game from '/Game.js'
 
 const canvas = document.getElementById('can')
 
-function strCoords(x, y){
-	return `${x}:${y}`
-}
-
 const game = new Game(canvas)
 
 //drawIs(ctx, is, 5)
