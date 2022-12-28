@@ -1,9 +1,8 @@
 
-import {drawIs} from '/DebugIsland.js'
-import Game from '/Game.js'
+import {drawIs} from './DebugIsland.js'
+import Game from './Game.js'
 
 
-//git test windows
 
 
 const canvas = document.getElementById('can')

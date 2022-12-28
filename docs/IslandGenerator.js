@@ -1,6 +1,4 @@
-function strCoords(x, y){
-	return `${x}:${y}`
-}
+import { strCoords } from "./Utils.js"
 
 noise.seed(Math.random())
 
