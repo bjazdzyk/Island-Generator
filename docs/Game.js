@@ -55,7 +55,7 @@ export default class Game{
         this.assets.stickItem.src = "/imgs/stick.png"
 
 
-        this.items = []
+        this.items = [0]
         this.items.push(new Item('stick', this.assets.stickItem))
 
 
@@ -95,6 +95,9 @@ export default class Game{
     interactionEvents(){
         document.addEventListener('click', (e)=>{
             if(!this.inventory.guiOpen){
+                const pageX = e.pageX
+                const pageY = e.pageY
+
                 const _dcx = Math.floor((e.pageX-this.renderer._W/2)/this.renderer.cellSize+this.renderer.cellOffsetX)
                 const _dcy = Math.floor((e.pageY-this.renderer._H/2)/this.renderer.cellSize+this.renderer.cellOffsetY)
 
@@ -112,9 +115,15 @@ export default class Game{
 
                 const _d = Math.sqrt(_dx*_dx + _dy*_dy)
 
+                
+                const tree = this.island.trees[strCoords(x, y)]
+
                 if(_d < 7){
-                    const tree = this.island.trees[strCoords(x, y)]
-                    this.island.trees[strCoords(x, y)] = 0
+                    if(tree == 2){//dryBush
+                        this.island.trees[strCoords(x, y)] = 0
+                        this.inventory.addItem(this.items[1])
+                    }
+                    
                 }
 
             }
@@ -137,8 +146,8 @@ class Renderer{
         this.game = game
         this.canvas = canvas
 
-        this.width = 30
-        this.height = 20
+        this.width = 20
+        this.height = 16
 
         this.cellOffsetX = 0.5
         this.cellOffsetY = 0.5
@@ -322,14 +331,14 @@ class Inventory{
                 ele.style.top = `${(j*3-2)/7*100}%`
                 ele.style.width = `${2/22*100}%`
 
-
+                const id = (j-1)*5+i
                 ele.addEventListener('click', (e)=>{
-                    this.invCellClicked((j-1)*5+i)
+                    this.invCellClicked(id)
                 })
 
 
-                this.domItemCells[strCoords(i, j)] = ele
-                this.invBottom.appendChild(this.domItemCells[strCoords(i, j)])
+                this.domItemCells[id] = ele
+                this.invBottom.appendChild(this.domItemCells[id])
             }
         }
 
@@ -372,15 +381,24 @@ class Inventory{
 
         return false
     }
+    addItem(item){
+        const es = this.findEmptySlot()
+        if(es){
+            this.eq[es] = item
+            this.domItemCells[es].style['background-image'] = `url(${item.img.src}`
+        }
+    }
     invCellClicked(id){
-        console.log(id)
+        console.log(this.eq[id])
+        
     }
 
     
 }
 
 class Item{
-    constructor(name){
+    constructor(name, img){
         this.name = name
+        this.img = img
     }
 }
