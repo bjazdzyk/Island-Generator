@@ -51,13 +51,16 @@ export default class Game{
         this.assets.stone.src = "/imgs/stone.png"
         this.assets.dungeonEntrance = new Image()
         this.assets.dungeonEntrance.src = "/imgs/dungeonEntrance.png"
+        this.assets.stickItem = new Image()
+        this.assets.stickItem.src = "/imgs/stick.png"
 
 
         this.items = []
-        this.items.push(new Item('stick'))
+        this.items.push(new Item('stick', this.assets.stickItem))
 
 
         this.loop(Date.now())
+        this.interactionEvents()
 
     }
     loop(time){
@@ -73,21 +76,49 @@ export default class Game{
 
     movementEvents(keys, delta){
         
+        if(!this.inventory.guiOpen){
 
+            if(keys['KeyW']){
+                this.player.y -= this.player.speed*delta
+            }
+            if(keys['KeyS']){
+                this.player.y += this.player.speed*delta
+            }
+            if(keys['KeyA']){
+                this.player.x -= this.player.speed*delta
+            }
+            if(keys['KeyD']){
+                this.player.x += this.player.speed*delta
+            }
+        }
+    }
+    interactionEvents(){
+        document.addEventListener('click', (e)=>{
+            if(!this.inventory.guiOpen){
+                const _dcx = Math.floor((e.pageX-this.renderer._W/2)/this.renderer.cellSize+this.renderer.cellOffsetX)
+                const _dcy = Math.floor((e.pageY-this.renderer._H/2)/this.renderer.cellSize+this.renderer.cellOffsetY)
 
-        if(keys['KeyW']){
-            this.player.y -= this.player.speed*delta
-        }
-        if(keys['KeyS']){
-            this.player.y += this.player.speed*delta
-        }
-        if(keys['KeyA']){
-            this.player.x -= this.player.speed*delta
-        }
-        if(keys['KeyD']){
-            this.player.x += this.player.speed*delta
-        }
-        
+                const _lx = this.renderer.lookAt.x
+                const _ly = this.renderer.lookAt.y
+
+                const x = _lx+_dcx
+                const y = _ly+_dcy
+
+                const _px = this.player.x
+                const _py = this.player.y
+
+                const _dx = Math.abs(_px-x-0.5)
+                const _dy = Math.abs(_py-y-0.5)
+
+                const _d = Math.sqrt(_dx*_dx + _dy*_dy)
+
+                if(_d < 7){
+                    const tree = this.island.trees[strCoords(x, y)]
+                    this.island.trees[strCoords(x, y)] = 0
+                }
+
+            }
+        })
     }
 }
 
@@ -109,8 +140,8 @@ class Renderer{
         this.width = 30
         this.height = 20
 
-        this.cellOffsetX = 0
-        this.cellOffsetY = 0
+        this.cellOffsetX = 0.5
+        this.cellOffsetY = 0.5
 
         this.cellSize = Math.max(this._H/this.height, this._W/this.width)
 
@@ -134,7 +165,7 @@ class Renderer{
         const _dx = _px - _lx
         const _dy = _py - _ly
 
-        this.focus(_lx + _dx/15, _ly + _dy/15)
+        this.focus(_lx + _dx/7, _ly + _dy/7)
 
         
 
@@ -156,8 +187,8 @@ class Renderer{
         const trees = this.game.island.trees
 
         //biomes
-        for(let i=0; i<=this.width; i++){
-            for(let j=0; j<=this.height; j++){
+        for(let i=0; i<=this.width+1; i++){
+            for(let j=0; j<=this.height+1; j++){
                 const x = this.lookAt.x - this.width/2 + i
                 const y = this.lookAt.y - this.height/2 + j
 
@@ -171,8 +202,8 @@ class Renderer{
         }
 
         //trees down & bush & grass
-        for(let j=0; j<=this.height+2; j++){
-            for(let i=-1; i<=this.width+1; i++){
+        for(let j=0; j<=this.height+3; j++){
+            for(let i=-1; i<=this.width+2; i++){
                 const x = this.lookAt.x - this.width/2 + i
                 const y = this.lookAt.y - this.height/2 + j
 
@@ -205,13 +236,13 @@ class Renderer{
         const _dx = this._W/2+(_px-_cx)*this.cellSize
         const _dy = this._H/2+(_py-_cy)*this.cellSize
 
-        ctx.drawImage(this.game.assets.player, _dx-this.cellSize, _dy-this.cellSize, this.cellSize, this.cellSize)
+        ctx.drawImage(this.game.assets.player, _dx-this.cellSize/2, _dy-this.cellSize/2, this.cellSize, this.cellSize)
 
 
 
         //trees top
-        for(let j=0; j<=this.height+2; j++){
-            for(let i=-1; i<=this.width+1; i++){
+        for(let j=0; j<=this.height+3; j++){
+            for(let i=-1; i<=this.width+2; i++){
                 const x = this.lookAt.x - this.width/2 + i
                 const y = this.lookAt.y - this.height/2 + j
 
@@ -241,10 +272,10 @@ class Player{
 
         this.game = game
 
-        this.x = this.game.island.spawnPoint.x
-        this.y = this.game.island.spawnPoint.y
+        this.x = this.game.island.spawnPoint.x+0.5
+        this.y = this.game.island.spawnPoint.y+0.5
 
-        this.speed = 0.01
+        this.speed = 0.0075
     }
 }
 
@@ -258,6 +289,8 @@ class Inventory{
         this.rows = 2
         this.cols = 5
 
+        this.eq = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
         this.domElement = document.createElement('inventory')
         this.domElement.setAttribute('id', 'inv')
         document.body.appendChild(this.domElement)
@@ -265,9 +298,11 @@ class Inventory{
 
         this.domLH = document.createElement('box')
         this.domLH.setAttribute('class', 'invCell lInvHand')
+        this.domLH.addEventListener('click', (e)=>{this.invCellClicked(11)})
         
         this.domRH = document.createElement('box')
         this.domRH.setAttribute('class', 'invCell rInvHand')
+        this.domRH.addEventListener('click', (e)=>{this.invCellClicked(12)})
 
         this.domElement.appendChild(this.domRH)
         this.domElement.appendChild(this.domLH)
@@ -286,6 +321,11 @@ class Inventory{
                 ele.style.left = `${(i*4-2)/22*100}%`
                 ele.style.top = `${(j*3-2)/7*100}%`
                 ele.style.width = `${2/22*100}%`
+
+
+                ele.addEventListener('click', (e)=>{
+                    this.invCellClicked((j-1)*5+i)
+                })
 
 
                 this.domItemCells[strCoords(i, j)] = ele
@@ -322,6 +362,18 @@ class Inventory{
                 this.ePressed = false
             }
         })
+    }
+    findEmptySlot(){
+        for(let i=1; i<=12; i++){
+            if(this.eq[i] == 0){
+                return i
+            }
+        }
+
+        return false
+    }
+    invCellClicked(id){
+        console.log(id)
     }
 
     

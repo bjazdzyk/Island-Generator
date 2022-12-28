@@ -19,7 +19,7 @@ export default class Island{
 		this.sFactor = 15
 		this.bigSFactor = 25
 		
-		this.size = 300
+		this.size = 200
 
 		this.spawnH = 1.5
 		this.spawnPoint = {x:this.size/2, y:this.size/2};
