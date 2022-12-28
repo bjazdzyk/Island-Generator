@@ -27,6 +27,7 @@ export default class Game{
 
         this.island = new Island()
         this.player = new Player(this)
+        this.inventory = new Inventory()
         this.renderer = new Renderer(this.canvas, this)
 
         this.assets = {}
@@ -52,8 +53,12 @@ export default class Game{
         this.assets.dungeonEntrance.src = "/imgs/dungeonEntrance.png"
 
 
+        this.items = []
+        this.items.push(new Item('stick'))
+
+
         this.loop(Date.now())
-        console.log(this.island.spawnPoint)
+
     }
     loop(time){
         let delta = Date.now() - time
@@ -240,5 +245,90 @@ class Player{
         this.y = this.game.island.spawnPoint.y
 
         this.speed = 0.01
+    }
+}
+
+class Inventory{
+    constructor(){
+        this.guiOpen = false
+
+        this.leftHand = 0
+        this.rightHand = 0
+
+        this.rows = 2
+        this.cols = 5
+
+        this.domElement = document.createElement('inventory')
+        this.domElement.setAttribute('id', 'inv')
+        document.body.appendChild(this.domElement)
+
+
+        this.domLH = document.createElement('box')
+        this.domLH.setAttribute('class', 'invCell lInvHand')
+        
+        this.domRH = document.createElement('box')
+        this.domRH.setAttribute('class', 'invCell rInvHand')
+
+        this.domElement.appendChild(this.domRH)
+        this.domElement.appendChild(this.domLH)
+
+
+        this.invBottom = document.createElement('box')
+        this.invBottom.setAttribute('id', 'invBottom')
+        this.domElement.appendChild(this.invBottom)
+
+        this.domItemCells = {}
+
+        for(let i=1; i<=this.cols; i++){
+            for(let j=1; j<=this.rows; j++){
+                const ele = document.createElement('box')
+                ele.setAttribute('class', 'invCell itemCell')
+                ele.style.left = `${(i*4-2)/22*100}%`
+                ele.style.top = `${(j*3-2)/7*100}%`
+                ele.style.width = `${2/22*100}%`
+
+
+                this.domItemCells[strCoords(i, j)] = ele
+                this.invBottom.appendChild(this.domItemCells[strCoords(i, j)])
+            }
+        }
+
+
+
+        this.ePressed = false
+
+        this.inventoryEvents()
+
+    }
+    inventoryEvents(){
+        document.addEventListener('keydown', (e)=>{
+            if(e.code == 'KeyE' && !this.ePressed){
+                if(this.guiOpen == true){
+                   this.ePressed = true
+                   this.guiOpen = false
+                   this.domElement.style.display = 'none' 
+                   
+                }else{
+                    this.ePressed = true
+                    this.guiOpen = true
+                    this.domElement.style.display = 'block'
+                    
+                }
+            }
+            
+        })
+        document.addEventListener('keyup', (e)=>{
+            if(e.code == 'KeyE'){
+                this.ePressed = false
+            }
+        })
+    }
+
+    
+}
+
+class Item{
+    constructor(name){
+        this.name = name
     }
 }

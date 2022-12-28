@@ -10,6 +10,7 @@ const canvas = document.getElementById('can')
 
 const game = new Game(canvas)
 
+console.log(game)
 //drawIs(ctx, is, 5)
 
 
