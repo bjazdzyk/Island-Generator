@@ -1,0 +1,35 @@
+{
+    "palmaTop": {
+        "url": "/imgs/palmaTop.png"
+    },
+    "palmaDown": {
+        "url": "/imgs/palmaDown.png"
+    },
+    "player": {
+        "url": "/imgs/player.png"
+    },
+    "grass": {
+        "url": "/imgs/grass.png"
+    },
+    "dryBush": {
+        "url": "/imgs/dryBush.png"
+    },
+    "blueFlower": {
+        "url": "/imgs/blueFlower.png"
+    },
+    "redFlower": {
+        "url": "/imgs/redFlower.png"
+    },
+    "whiteFlower": {
+        "url": "/imgs/whiteFlower.png"
+    },
+    "stone": {
+        "url": "/imgs/stone.png"
+    },
+    "dungeonEntrance": {
+        "url": "/imgs/dungeonEntrance.png"
+    },
+    "stickItem": {
+        "url": "/imgs/stick.png"
+    }
+}

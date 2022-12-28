@@ -2,10 +2,7 @@ import Island from './IslandGenerator.js'
 import { Renderer } from './Renderer.js';
 import { Inventory, Item } from './Inventory.js';
 import { strCoords } from "./Utils.js"
-
-function mod(n, m) {
-    return ((n % m) + m) % m;
-}
+import assetMap from './assets.json' assert { type: 'json' };
 
 
 let k = {}
@@ -30,30 +27,13 @@ export default class Game{
         this.inventory = new Inventory()
         this.renderer = new Renderer(this.canvas, this)
 
+        //load assets
         this.assets = {}
-        this.assets.palmaTop = new Image()
-        this.assets.palmaTop.src = "/imgs/palmaTop.png"
-        this.assets.palmaDown = new Image()
-        this.assets.palmaDown.src = "/imgs/palmaDown.png"
-        this.assets.player = new Image()
-        this.assets.player.src = "/imgs/player.png"
-        this.assets.grass = new Image()
-        this.assets.grass.src = "/imgs/grass.png"
-        this.assets.dryBush = new Image()
-        this.assets.dryBush.src = "/imgs/dryBush.png"
-        this.assets.blueFlower = new Image()
-        this.assets.blueFlower.src = "/imgs/blueFlower.png"
-        this.assets.redFlower = new Image()
-        this.assets.redFlower.src = "/imgs/redFlower.png"
-        this.assets.whiteFlower = new Image()
-        this.assets.whiteFlower.src = "/imgs/whiteFlower.png"
-        this.assets.stone = new Image()
-        this.assets.stone.src = "/imgs/stone.png"
-        this.assets.dungeonEntrance = new Image()
-        this.assets.dungeonEntrance.src = "/imgs/dungeonEntrance.png"
-        this.assets.stickItem = new Image()
-        this.assets.stickItem.src = "/imgs/stick.png"
-
+        for(let assetName in assetMap){
+            console.log(assetName)
+            this.assets[assetName] = new Image()
+            this.assets[assetName].src = assetMap[assetName].url
+        }
 
         this.items = [0]
         this.items.push(new Item('stick', this.assets.stickItem))

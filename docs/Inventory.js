@@ -93,8 +93,14 @@ export class Inventory{
     }
     addItem(item){
         const es = this.findEmptySlot()
-        if(es){
-            this.eq[es] = item
+        
+        this.eq[es] = item
+
+        if(es == 11){
+            this.domLH.style['background-image'] = `url(${item.img.src}`
+        }else if(es == 12){
+            this.domRH.style['background-image'] = `url(${item.img.src}`
+        }else if(es){
             this.domItemCells[es].style['background-image'] = `url(${item.img.src}`
         }
     }
