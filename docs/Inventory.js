@@ -1,5 +1,9 @@
+import recipes from './recipes.json' assert { type: 'json' };
+
 export class Inventory{
-    constructor(){
+    constructor(game){
+        this.game = game
+
         this.guiOpen = false
 
         this.leftHand = 0
@@ -9,7 +13,10 @@ export class Inventory{
         this.cols = 5
 
         this.eq = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        this.cursorSlot = 0
 
+
+        //gui
         this.domElement = document.createElement('inventory')
         this.domElement.setAttribute('id', 'inv')
         document.body.appendChild(this.domElement)
@@ -17,11 +24,11 @@ export class Inventory{
 
         this.domLH = document.createElement('box')
         this.domLH.setAttribute('class', 'invCell lInvHand')
-        this.domLH.addEventListener('click', (e)=>{this.invCellClicked(11)})
+        this.domLH.addEventListener('click', (e)=>{this.invCellClicked(1)})
         
         this.domRH = document.createElement('box')
         this.domRH.setAttribute('class', 'invCell rInvHand')
-        this.domRH.addEventListener('click', (e)=>{this.invCellClicked(12)})
+        this.domRH.addEventListener('click', (e)=>{this.invCellClicked(2)})
 
         this.domElement.appendChild(this.domRH)
         this.domElement.appendChild(this.domLH)
@@ -41,7 +48,7 @@ export class Inventory{
                 ele.style.top = `${(j*3-2)/7*100}%`
                 ele.style.width = `${2/22*100}%`
 
-                const id = (j-1)*5+i
+                const id = (j-1)*5+i+2
                 ele.addEventListener('click', (e)=>{
                     this.invCellClicked(id)
                 })
@@ -51,6 +58,17 @@ export class Inventory{
                 this.invBottom.appendChild(this.domItemCells[id])
             }
         }
+
+
+        //ig hands
+        this.lIGHand = document.createElement('box')
+        this.lIGHand.setAttribute('class', 'igCell lIGHand')
+
+        this.rIGHand = document.createElement('box')
+        this.rIGHand.setAttribute('class', 'igCell rIGHand')
+
+        document.body.appendChild(this.lIGHand)
+        document.body.appendChild(this.rIGHand)
 
 
 
@@ -66,11 +84,17 @@ export class Inventory{
                    this.ePressed = true
                    this.guiOpen = false
                    this.domElement.style.display = 'none' 
+
+                   this.lIGHand.style.display = 'block'
+                   this.rIGHand.style.display = 'block'
                    
                 }else{
                     this.ePressed = true
                     this.guiOpen = true
                     this.domElement.style.display = 'block'
+
+                    this.lIGHand.style.display = 'none'
+                    this.rIGHand.style.display = 'none'
                     
                 }
             }
@@ -96,24 +120,64 @@ export class Inventory{
         
         this.eq[es] = item
 
-        if(es == 11){
-            this.domLH.style['background-image'] = `url(${item.img.src}`
-        }else if(es == 12){
-            this.domRH.style['background-image'] = `url(${item.img.src}`
-        }else if(es){
-            this.domItemCells[es].style['background-image'] = `url(${item.img.src}`
+        if(es){
+            this.setItemAt(es, item)
+        }else{
+            //drop item
         }
     }
     invCellClicked(id){
-        console.log(this.eq[id])
-        
+
+        if(!this.cursorSlot){
+
+            this.cursorSlot = this.eq[id]
+            this.setItemAt(id, 0)
+
+        }else{
+            if(!this.eq[id]){
+
+                this.setItemAt(id, this.cursorSlot)
+                this.cursorSlot = 0
+
+            }else{
+                const i1 = Math.min(this.cursorSlot.id, this.eq[id].id)
+                const i2 = Math.max(this.cursorSlot.id, this.eq[id].id)
+
+                if(recipes[i1]){if(recipes[i1][i2]){
+                    const result = recipes[i1][i2]
+                    
+                    this.setItemAt(id, this.game.items[result])
+                    this.cursorSlot = 0
+
+                }}
+            }
+        }
+    }
+    setItemAt(id, item){
+        this.eq[id] = item
+        let url = "none"
+        if(item){
+            url = `url(${item.img.src}`
+        }
+
+
+        if(id == 1){
+            this.domLH.style['background-image'] = url
+            this.lIGHand.style['background-image'] = url
+        }else if(id == 2){
+            this.domRH.style['background-image'] = url
+            this.rIGHand.style['background-image'] = url
+        }else if(id){
+            this.domItemCells[id].style['background-image'] = url
+        }
     }
 
     
 }
 
 export class Item{
-    constructor(name, img){
+    constructor(id, name, img){
+        this.id = id
         this.name = name
         this.img = img
     }

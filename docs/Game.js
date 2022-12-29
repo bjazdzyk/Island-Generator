@@ -24,19 +24,22 @@ export default class Game{
 
         this.island = new Island()
         this.player = new Player(this)
-        this.inventory = new Inventory()
+        this.inventory = new Inventory(this)
         this.renderer = new Renderer(this.canvas, this)
 
         //load assets
         this.assets = {}
         for(let assetName in assetMap){
-            console.log(assetName)
             this.assets[assetName] = new Image()
             this.assets[assetName].src = assetMap[assetName].url
         }
 
         this.items = [0]
-        this.items.push(new Item('stick', this.assets.stickItem))
+        this.items.push(new Item(1, 'stick', this.assets.stickItem))
+        this.items.push(new Item(2, 'string', this.assets.stringItem))
+        this.items.push(new Item(3, 'dryGrass', this.assets.dryGrassItem))
+        this.items.push(new Item(4, 'rope', this.assets.ropeItem))
+
 
 
         this.loop(Date.now())
@@ -76,7 +79,7 @@ export default class Game{
         document.addEventListener('click', (e)=>{
             if(!this.inventory.guiOpen){
                 const pageX = e.pageX
-                const pageY = e.pageY
+                const pageY = e.pageY//to particles
 
                 const _dcx = Math.floor((e.pageX-this.renderer._W/2)/this.renderer.cellSize+this.renderer.cellOffsetX)
                 const _dcy = Math.floor((e.pageY-this.renderer._H/2)/this.renderer.cellSize+this.renderer.cellOffsetY)
@@ -101,7 +104,17 @@ export default class Game{
                 if(_d < 7){
                     if(tree == 2){//dryBush
                         this.island.trees[strCoords(x, y)] = 0
-                        this.inventory.addItem(this.items[1])
+                        this.inventory.addItem(this.items[1])//stick
+                    }
+                    else if(tree == 3){//grass
+                        this.island.trees[strCoords(x, y)] = 0
+                        const _r = Math.random()
+
+                        if(_r > 0.5){
+                            this.inventory.addItem(this.items[2])//string
+                        }else{
+                            this.inventory.addItem(this.items[3])//dryGrass
+                        }
                     }
                     
                 }

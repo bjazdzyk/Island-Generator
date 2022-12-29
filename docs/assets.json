@@ -31,5 +31,14 @@
     },
     "stickItem": {
         "url": "/imgs/stick.png"
+    },
+    "stringItem": {
+        "url": "/imgs/stringItem.png"
+    },
+    "dryGrassItem": {
+        "url": "/imgs/dryGrassItem.png"
+    },
+    "ropeItem": {
+        "url": "/imgs/ropeItem.png"
     }
 }
