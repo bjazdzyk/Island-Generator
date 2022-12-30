@@ -21,14 +21,26 @@ export class Inventory{
         this.domElement.setAttribute('id', 'inv')
         document.body.appendChild(this.domElement)
 
+        this.domCursor = document.createElement('box')
+        this.domCursor.setAttribute('id', 'cursorSlot')
+
+        document.body.appendChild(this.domCursor)
+
+        document.addEventListener('mousemove', (e)=>{
+            this.domCursor.style.left = `calc(${e.clientX}px - 5vh)`
+            this.domCursor.style.top = `calc(${e.clientY}px - 5vh)`
+        })
+        //this.domCursor.addEventListener('mousedown', (e)=>{this.domCursor.style['z-index'] = 0})
+        // this.domCursor.addEventListener('mouseup', (e)=>{this.domCursor.style['z-index'] = 2})
+
 
         this.domLH = document.createElement('box')
         this.domLH.setAttribute('class', 'invCell lInvHand')
-        this.domLH.addEventListener('click', (e)=>{this.invCellClicked(1)})
+        this.domLH.addEventListener('mouseup', (e)=>{this.invCellClicked(1)})
         
         this.domRH = document.createElement('box')
         this.domRH.setAttribute('class', 'invCell rInvHand')
-        this.domRH.addEventListener('click', (e)=>{this.invCellClicked(2)})
+        this.domRH.addEventListener('mouseup', (e)=>{this.invCellClicked(2)})
 
         this.domElement.appendChild(this.domRH)
         this.domElement.appendChild(this.domLH)
@@ -49,7 +61,7 @@ export class Inventory{
                 ele.style.width = `${2/22*100}%`
 
                 const id = (j-1)*5+i+2
-                ele.addEventListener('click', (e)=>{
+                ele.addEventListener('mouseup', (e)=>{
                     this.invCellClicked(id)
                 })
 
@@ -58,6 +70,7 @@ export class Inventory{
                 this.invBottom.appendChild(this.domItemCells[id])
             }
         }
+
 
 
         //ig hands
@@ -129,15 +142,18 @@ export class Inventory{
     invCellClicked(id){
 
         if(!this.cursorSlot){
-
-            this.cursorSlot = this.eq[id]
-            this.setItemAt(id, 0)
+            if(this.eq[id]){
+                this.cursorSlot = this.eq[id]
+                this.domCursor.style['background-image'] = `url(${this.eq[id].img.src})`
+                this.setItemAt(id, 0)
+            }
 
         }else{
             if(!this.eq[id]){
 
                 this.setItemAt(id, this.cursorSlot)
                 this.cursorSlot = 0
+                this.domCursor.style['background-image'] = 'none'
 
             }else{
                 const i1 = Math.min(this.cursorSlot.id, this.eq[id].id)
@@ -148,8 +164,18 @@ export class Inventory{
                     
                     this.setItemAt(id, this.game.items[result])
                     this.cursorSlot = 0
+                    this.domCursor.style['background-image'] = 'none'
+
+                    return
 
                 }}
+                const _it = this.eq[id]
+
+                this.setItemAt(id, this.cursorSlot)
+                this.cursorSlot = _it
+                this.domCursor.style['background-image'] = `url(${_it.img.src})`
+
+
             }
         }
     }
@@ -167,6 +193,8 @@ export class Inventory{
         }else if(id == 2){
             this.domRH.style['background-image'] = url
             this.rIGHand.style['background-image'] = url
+        }else if(id == 13){
+            this.cursorSlot.style['background-image'] = url
         }else if(id){
             this.domItemCells[id].style['background-image'] = url
         }
