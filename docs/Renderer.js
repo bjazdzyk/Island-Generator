@@ -14,8 +14,8 @@ export class Renderer{
         this.game = game
         this.canvas = canvas
 
-        this.width = 20
-        this.height = 12
+        this.width = 30
+        this.height = 16
 
         this.cellOffsetX = 0.5
         this.cellOffsetY = 0.5

@@ -16,7 +16,7 @@ body{
 	position:fixed;
 }
 #inv{
-	z-index: 1;
+	z-index: 3;
 	position:fixed;
 	left: calc(50vw - 52.5vh);
 	top: 15vh;
@@ -69,8 +69,10 @@ box{
 	aspect-ratio: 1/1;
 }
 .igCell{
+	border-radius: 1vh;
+	z-index: 3;
 	background-color: chocolate;
-	border: 5px solid saddlebrown;
+	border: 1vh solid saddlebrown;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	image-rendering: pixelated;
@@ -95,7 +97,15 @@ box{
 	background-repeat: no-repeat;
 	background-size: 100%;
 	image-rendering: pixelated;
-	z-index: 3;
+	z-index: 4;
+	pointer-events:none;
+}
+#nightShadow{
+	position: fixed;
+	z-index: 2;
+	background-color: black;
+	width: 100vw;
+	height: 100vh;
 	pointer-events:none;
 }
 

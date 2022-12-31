@@ -2,6 +2,7 @@ import Island from './IslandGenerator.js'
 import { Renderer } from './Renderer.js';
 import { Inventory, Item } from './Inventory.js';
 import { strCoords } from "./Utils.js"
+import { DayCycle } from './DayCycle.js';
 import assetMap from './assets.json' assert { type: 'json' };
 
 
@@ -25,6 +26,7 @@ export default class Game{
         this.island = new Island()
         this.player = new Player(this)
         this.inventory = new Inventory(this)
+        this.dayCycle = new DayCycle(this)
         this.renderer = new Renderer(this.canvas, this)
 
         //load assets
@@ -42,6 +44,7 @@ export default class Game{
         this.items.push(new Item(5, 'bat', this.assets.batItem))
         this.items.push(new Item(6, 'kindling', this.assets.kindlingItem))
         this.items.push(new Item(7, 'torch', this.assets.torchItem))
+        this.items.push(new Item(8, 'campfire', this.assets.campfireItem))
 
 
 
@@ -52,6 +55,7 @@ export default class Game{
     loop(time){
         let delta = Date.now() - time
 
+        this.dayCycle.update(delta)
         this.renderer.update()
         this.renderer.render()
 

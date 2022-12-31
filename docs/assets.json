@@ -49,5 +49,8 @@
     },
     "torchItem": {
         "url": "/imgs/torchItem.png"
+    },
+    "campfireItem": {
+        "url": "/imgs/campfireItem.png"
     }
 }
