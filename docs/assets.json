@@ -40,5 +40,14 @@
     },
     "ropeItem": {
         "url": "/imgs/ropeItem.png"
+    },
+    "batItem": {
+        "url": "/imgs/batItem.png"
+    },
+    "kindlingItem": {
+        "url": "/imgs/kindlingItem.png"
+    },
+    "torchItem": {
+        "url": "/imgs/torchItem.png"
     }
 }

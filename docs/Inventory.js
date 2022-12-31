@@ -36,10 +36,12 @@ export class Inventory{
 
         this.domLH = document.createElement('box')
         this.domLH.setAttribute('class', 'invCell lInvHand')
+        this.domLH.setAttribute('id', `invCell${1}`)
         this.domLH.addEventListener('mouseup', (e)=>{this.invCellClicked(1)})
         
         this.domRH = document.createElement('box')
         this.domRH.setAttribute('class', 'invCell rInvHand')
+        this.domRH.setAttribute('id', `invCell${2}`)
         this.domRH.addEventListener('mouseup', (e)=>{this.invCellClicked(2)})
 
         this.domElement.appendChild(this.domRH)
@@ -54,13 +56,16 @@ export class Inventory{
 
         for(let i=1; i<=this.cols; i++){
             for(let j=1; j<=this.rows; j++){
+
+                const id = (j-1)*5+i+2
+
                 const ele = document.createElement('box')
+                ele.setAttribute('id', `invCell${id}`)
                 ele.setAttribute('class', 'invCell itemCell')
                 ele.style.left = `${(i*4-2)/22*100}%`
                 ele.style.top = `${(j*3-2)/7*100}%`
                 ele.style.width = `${2/22*100}%`
 
-                const id = (j-1)*5+i+2
                 ele.addEventListener('mouseup', (e)=>{
                     this.invCellClicked(id)
                 })
@@ -70,6 +75,9 @@ export class Inventory{
                 this.invBottom.appendChild(this.domItemCells[id])
             }
         }
+
+        this.invCellHoverStyle = document.createElement('style')
+        document.getElementsByTagName('head')[0].appendChild(this.invCellHoverStyle)
 
 
 
@@ -90,24 +98,60 @@ export class Inventory{
         this.inventoryEvents()
 
     }
+    updateHover(){
+
+        let css = ""
+
+        for(let i=1; i<=12; i++){
+            const _cur = (this.cursorSlot.id || 0)
+            const _cel = (this.eq[i].id || 0)
+
+            const i1 = Math.min(_cur, _cel)
+            const i2 = Math.max(_cur, _cel)
+
+            let addCss = ""
+
+            if((recipes[i1] || [])[i2]){
+                addCss = `#invCell${i}:hover{background-color:lightgreen;}`
+            }else{
+                addCss = `#invCell${i}:hover{background-color:darksalmon;}`
+            }
+
+            css += addCss
+
+        }
+        if(this.invCellHoverStyle.styleSheet) {
+            this.invCellHoverStyle.styleSheet.cssText = css;
+        } else {
+            this.invCellHoverStyle.appendChild(document.createTextNode(css));
+        }
+    }
     inventoryEvents(){
         document.addEventListener('keydown', (e)=>{
             if(e.code == 'KeyE' && !this.ePressed){
-                if(this.guiOpen == true){
-                   this.ePressed = true
-                   this.guiOpen = false
-                   this.domElement.style.display = 'none' 
+                if(this.guiOpen == true){//close inv
+                    this.ePressed = true
+                    this.guiOpen = false
+                    this.domElement.style.display = 'none' 
 
-                   this.lIGHand.style.display = 'block'
-                   this.rIGHand.style.display = 'block'
+                    this.lIGHand.style.display = 'block'
+                    this.rIGHand.style.display = 'block'
+
+                    if(this.cursorSlot){
+                        this.addItem(this.cursorSlot)
+                        this.cursorSlot = 0
+                        this.domCursor.style['background-image'] = 'none'
+                    }
+
                    
-                }else{
+                }else{//open inv
                     this.ePressed = true
                     this.guiOpen = true
                     this.domElement.style.display = 'block'
 
                     this.lIGHand.style.display = 'none'
                     this.rIGHand.style.display = 'none'
+                    this.updateHover()
                     
                 }
             }
@@ -166,6 +210,8 @@ export class Inventory{
                     this.cursorSlot = 0
                     this.domCursor.style['background-image'] = 'none'
 
+                    this.updateHover()
+
                     return
 
                 }}
@@ -178,6 +224,7 @@ export class Inventory{
 
             }
         }
+        this.updateHover()
     }
     setItemAt(id, item){
         this.eq[id] = item

@@ -39,6 +39,9 @@ export default class Game{
         this.items.push(new Item(2, 'string', this.assets.stringItem))
         this.items.push(new Item(3, 'dryGrass', this.assets.dryGrassItem))
         this.items.push(new Item(4, 'rope', this.assets.ropeItem))
+        this.items.push(new Item(5, 'bat', this.assets.batItem))
+        this.items.push(new Item(6, 'kindling', this.assets.kindlingItem))
+        this.items.push(new Item(7, 'torch', this.assets.torchItem))
 
 
 
