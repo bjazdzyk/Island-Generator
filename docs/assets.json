@@ -52,5 +52,8 @@
     },
     "campfireItem": {
         "url": "/imgs/campfireItem.png"
+    },
+    "boarEntity": {
+        "url": "/imgs/boarEntity.png"
     }
 }

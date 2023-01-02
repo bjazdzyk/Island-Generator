@@ -4,6 +4,7 @@ import { Inventory, Item } from './Inventory.js';
 import { strCoords } from "./Utils.js"
 import { DayCycle } from './DayCycle.js';
 import assetMap from './assets.json' assert { type: 'json' };
+import { MobManager } from './Entities.js';
 
 
 let k = {}
@@ -23,18 +24,23 @@ export default class Game{
         this.canvas = canvas
         this.ctx = this.canvas.getContext('2d')
 
-        this.island = new Island()
-        this.player = new Player(this)
-        this.inventory = new Inventory(this)
-        this.dayCycle = new DayCycle(this)
-        this.renderer = new Renderer(this.canvas, this)
-
         //load assets
         this.assets = {}
         for(let assetName in assetMap){
             this.assets[assetName] = new Image()
             this.assets[assetName].src = assetMap[assetName].url
         }
+
+        this.island = new Island()
+        this.player = new Player(this)
+        this.inventory = new Inventory(this)
+        this.dayCycle = new DayCycle(this)
+        this.mobManager = new MobManager(this)
+        this.renderer = new Renderer(this.canvas, this)
+
+        console.log(this.mobManager)
+
+        
 
         this.items = [0]
         this.items.push(new Item(1, 'stick', this.assets.stickItem))
@@ -56,6 +62,7 @@ export default class Game{
         let delta = Date.now() - time
 
         this.dayCycle.update(delta)
+        this.mobManager.update(delta)
         this.renderer.update()
         this.renderer.render()
 

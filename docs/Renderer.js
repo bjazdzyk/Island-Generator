@@ -116,6 +116,20 @@ export class Renderer{
         ctx.drawImage(this.game.assets.player, _dx-this.cellSize/2, _dy-this.cellSize/2, this.cellSize, this.cellSize)
 
 
+        //mobs
+        for(let mob of this.game.mobManager.mobs){
+            //console.log(mob)
+            const _cx = this.lookAt.x+this.cellOffsetX
+            const _cy = this.lookAt.y+this.cellOffsetY
+            const _px = mob.x
+            const _py = mob.y
+
+            const _dx = this._W/2+(_px-_cx)*this.cellSize
+            const _dy = this._H/2+(_py-_cy)*this.cellSize
+
+            mob.draw(ctx, _dx, _dy, this.cellSize)
+        }
+
 
         //trees top
         for(let j=0; j<=this.height+3; j++){
@@ -131,6 +145,7 @@ export class Renderer{
                 }
             }
         }
+
 
 
     }
