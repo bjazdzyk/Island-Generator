@@ -17,7 +17,7 @@ export default class Island{
 		this.sFactor = 15
 		this.bigSFactor = 25
 		
-		this.size = 20
+		this.size = 100
 
 		this.spawnH = 1.5
 		this.spawnPoint = {x:this.size/2, y:this.size/2};
@@ -31,6 +31,7 @@ export default class Island{
 
 	build(){
 
+		this.H = {}
 		this.map = {}
 		this.trees = {}
 
@@ -49,6 +50,7 @@ export default class Island{
 				const h = ((R-r)/R)*5+(S*0.75+s*0.25)
 				const v = Math.min(Math.max(Math.floor(h), 0), 3)
 
+				this.H[strCoords(i, j)] = h
 				this.map[strCoords(i, j)] = v
 
 				const sOff = this.size*10
