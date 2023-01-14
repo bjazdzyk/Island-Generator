@@ -37,6 +37,8 @@ class Boar{
         this.x = this.entityManager.game.island.spawnPoint.x
         this.y = this.entityManager.game.island.spawnPoint.y
 
+        this.flip = 'LEFT'
+
         //to logics
         this.time = 0
 
@@ -120,6 +122,12 @@ class Boar{
 
                 this.state = 'running'
 
+                if(this.accX > 0){
+                    this.flip = 'RIGHT'
+                }else{
+                    this.flip = 'LEFT'
+                }
+
             }else if(this.state == 'running'){
 
                 this.duration = Math.random()*10000-1000
@@ -137,7 +145,21 @@ class Boar{
         const scale = 3
         const bSize = size*scale
 
-        ctx.drawImage(this.imgSrc, x + size/2 - bSize/2, y + size/2 - bSize/2, bSize, bSize)
+        const _W = this.entityManager.game.renderer._W
+        console.log(_W)
+
+        if(this.flip == 'LEFT'){
+            ctx.drawImage(this.imgSrc, x + size/2 - bSize/2, y + size/2 - bSize/2, bSize, bSize)
+        }else{
+            ctx.save()
+            ctx.translate(_W, 0);
+            ctx.scale(-1, 1);
+
+            ctx.drawImage(this.imgSrc, _W-(x+size/2-bSize/2)-bSize, y+size/2-bSize/2, bSize, bSize)
+            //ctx.drawImage(this.imgSrc, _W/2, 0, bSize, bSize)
+
+            ctx.restore()
+        }
 
     }
 
