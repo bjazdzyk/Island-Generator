@@ -7,8 +7,38 @@ export class MobManager{
 
         this.mobs = []
 
-        this.summon('boar', 10, 10)
+        this.mobSpawn = ['boar']
 
+        this.mobSpawnRate = 5000
+        this.mobSpawnTimeStamp = Date.now()
+
+        for(let i=0; i<5; i++){
+            this.spawnMob()
+        }
+
+
+    }
+    spawnMob(){
+
+        const isSize = this.game.island.size
+        const px = this.game.player.x
+        const py = this.game.player.y
+
+        const r = isSize/2
+        let rad, dep, x, y
+        let dx=0, dy=0
+        while(Math.sqrt(dx*dx + dy*dy) < 20){
+            rad = Math.random()*Math.PI*2
+            dep = Math.random()*r*0.7
+            x = r + Math.sin(rad)*dep
+            y = r + Math.cos(rad)*dep
+
+            dx = Math.abs(px-x)
+            dy = Math.abs(py-y)
+        }
+
+        this.summon(this.mobSpawn[0], x, y)
+        console.log(x, y)
     }
     summon(mob, x, y){
         if(mob == 'boar'){
@@ -34,8 +64,8 @@ class Boar{
         
         this.hp = this.maxHp
 
-        this.x = this.entityManager.game.island.spawnPoint.x
-        this.y = this.entityManager.game.island.spawnPoint.y
+        this.x = x
+        this.y = y
 
         this.flip = 'LEFT'
 
@@ -58,11 +88,11 @@ class Boar{
 
     }
     update(delta){
-        //console.log(this.dirX, this.dirY)
         this.time += delta
+        const cellSize = this.entityManager.game.renderer.cellSize
 
         if(this.state == 'running'){
-            if(Math.sqrt(this.dirX*this.dirX + this.dirY*this.dirY) < this.maxVel){
+            if(Math.sqrt(this.dirX*this.dirX + this.dirY*this.dirY) < this.maxVel*cellSize/50){
                 this.dirX += this.accX
                 this.dirY += this.accY
             }
@@ -87,7 +117,7 @@ class Boar{
                 this.accX = 0
                 this.accY = 0
 
-                const myH = this.H[strCoords(Math.round(this.x), Math.round(this.y))]
+                //const myH = this.H[strCoords(Math.round(this.x), Math.round(this.y))]
 
                 let bestHVal = -10
                 let bestTX = 0
@@ -112,13 +142,12 @@ class Boar{
 
                 const dX =  bestTX - this.x
                 const dY =  bestTY - this.y
-                console.log(dX, dY)
                 const d = Math.sqrt(dX*dX + dY*dY)
 
                 
 
-                this.accX = (dX/d || 0) * this.runningSpeed
-                this.accY = (dY/d || 0) * this.runningSpeed
+                this.accX = (dX/d || 0) * this.runningSpeed * cellSize/50
+                this.accY = (dY/d || 0) * this.runningSpeed * cellSize/50
 
                 this.state = 'running'
 
@@ -146,7 +175,6 @@ class Boar{
         const bSize = size*scale
 
         const _W = this.entityManager.game.renderer._W
-        console.log(_W)
 
         if(this.flip == 'LEFT'){
             ctx.drawImage(this.imgSrc, x + size/2 - bSize/2, y + size/2 - bSize/2, bSize, bSize)

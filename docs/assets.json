@@ -55,5 +55,11 @@
     },
     "boarEntity": {
         "url": "/imgs/boarEntity.png"
+    },
+    "bush": {
+        "url": "/imgs/bush.png"
+    },
+    "berryBush": {
+        "url": "/imgs/berryBush.png"
     }
 }

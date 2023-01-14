@@ -16,6 +16,8 @@ export class Renderer{
 
         this.width = 30
         this.height = 16
+        // this.width = 50
+        // this.height = 50
 
         this.cellOffsetX = 0.5
         this.cellOffsetY = 0.5
@@ -63,6 +65,8 @@ export class Renderer{
         const ctx = this.canvas.getContext('2d')
         const trees = this.game.island.trees
 
+        ctx.imageSmoothingEnabled = false;
+
         //biomes
         for(let i=0; i<=this.width+1; i++){
             for(let j=0; j<=this.height+1; j++){
@@ -84,7 +88,6 @@ export class Renderer{
                 const x = this.lookAt.x - this.width/2 + i
                 const y = this.lookAt.y - this.height/2 + j
 
-                ctx.imageSmoothingEnabled = false;
                 if(trees[strCoords(x, y)] == 1){
                     ctx.drawImage(this.game.assets.palmaDown, this.LEFT + (i-1)*this.cellSize, this.UP + (j-2)*this.cellSize, this.cellSize*3, this.cellSize*3)
                 }else if(trees[strCoords(x, y)]==2){
@@ -99,7 +102,27 @@ export class Renderer{
                     ctx.drawImage(this.game.assets.whiteFlower, this.LEFT + i*this.cellSize, this.UP + j*this.cellSize, this.cellSize, this.cellSize)
                 }else if(trees[strCoords(x, y)]==7){
                     ctx.drawImage(this.game.assets.stone, this.LEFT + (i-1)*this.cellSize, this.UP + (j-1)*this.cellSize, this.cellSize*3, this.cellSize*3)
+                }else if(trees[strCoords(x, y)]==8){
+                    ctx.drawImage(this.game.assets.bush, this.LEFT + (i-0.5)*this.cellSize, this.UP + (j-1)*this.cellSize, this.cellSize*2, this.cellSize*2)
+                }else if(trees[strCoords(x, y)]==9){
+                    ctx.drawImage(this.game.assets.berryBush, this.LEFT + (i-0.5)*this.cellSize, this.UP + (j-1)*this.cellSize, this.cellSize*2, this.cellSize*2)
                 }
+            }
+        }
+
+        const dunPos = this.game.island.dungeonPos
+        const LX = this.lookAt.x - this.width/2
+        const RX = this.lookAt.x + this.width/2 
+        const UY = this.lookAt.y - this.height/2
+        const DY = this.lookAt.y + this.height/2
+
+        
+        
+        if(dunPos.x > LX-3 && dunPos.x < RX+3){
+            if(dunPos.y > UY-3 && dunPos.y < DY+3){
+
+                ctx.drawImage(this.game.assets.dungeonEntrance, this.LEFT + (dunPos.x-LX-1)*this.cellSize, this.UP + (dunPos.y-UY-1)*this.cellSize, this.cellSize*3, this.cellSize*3)
+
             }
         }
 
@@ -137,7 +160,6 @@ export class Renderer{
                 const x = this.lookAt.x - this.width/2 + i
                 const y = this.lookAt.y - this.height/2 + j
 
-                ctx.imageSmoothingEnabled = false;
                 if(trees[strCoords(x, y)]==1){
                     
                     ctx.drawImage(this.game.assets.palmaTop, this.LEFT + (i-1)*this.cellSize, this.UP + (j-2)*this.cellSize, this.cellSize*3, this.cellSize*3)

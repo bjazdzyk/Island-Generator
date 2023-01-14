@@ -62,11 +62,21 @@ export default class Island{
 					!this.trees[strCoords(i-1, j+1)]){
 					if(v >= 2){
 						if((ts*100)%10 > 9.75){
-							if((ts*10000)%10 > 3){
+							if((ts*10000)%10 > 4){
 								this.trees[strCoords(i, j)] = 1 //tree
 							}else{
 								this.trees[strCoords(i, j)] = 7 //stone
 							}
+
+						}else if(v > 2){
+							if((ts*100)%10 > 9.5){
+								if((ts*10000)%10 > 6){
+									this.trees[strCoords(i, j)] = 8 //bush
+								}else{
+									this.trees[strCoords(i, j)] = 9 //berrybush
+								}
+							}
+
 
 						}else if(v==2){
 							if((ts*100)%10 > 8.5){
@@ -83,7 +93,7 @@ export default class Island{
 						}
 					}
 					if(v == 1){
-						if((ts*10000)%10 > 9.9){
+						if((ts*10000)%10 > 9.8){
 							if(!this.trees[strCoords(i-1, j)] && 
 								!this.trees[strCoords(i, j-1)] &&
 								!this.trees[strCoords(i-1, j-1)] &&
