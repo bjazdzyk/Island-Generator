@@ -5,6 +5,7 @@ import { strCoords } from "./Utils.js"
 import { DayCycle } from './DayCycle.js';
 import assetMap from './assets.json' assert { type: 'json' };
 import { MobManager } from './Entities.js';
+import { Player } from './Player.js';
 
 
 let k = {}
@@ -37,10 +38,7 @@ export default class Game{
         this.dayCycle = new DayCycle(this)
         this.mobManager = new MobManager(this)
         this.renderer = new Renderer(this.canvas, this)
-
-        console.log(this.mobManager)
-
-        
+    
 
         this.items = [0]
         this.items.push(new Item(1, 'stick', this.assets.stickItem))
@@ -51,6 +49,7 @@ export default class Game{
         this.items.push(new Item(6, 'kindling', this.assets.kindlingItem))
         this.items.push(new Item(7, 'torch', this.assets.torchItem))
         this.items.push(new Item(8, 'campfire', this.assets.campfireItem))
+        this.items.push(new Item(9, 'berries', this.assets.berriesItem))
 
 
 
@@ -130,6 +129,11 @@ export default class Game{
                             this.inventory.addItem(this.items[3])//dryGrass
                         }
                     }
+                    else if(tree == 9){//berryBush
+                        this.island.trees[strCoords(x, y)] = 8
+                        this.inventory.addItem(this.items[9])
+
+                    }
                     
                 }
 
@@ -138,14 +142,4 @@ export default class Game{
     }
 }
 
-class Player{
-    constructor(game){
 
-        this.game = game
-
-        this.x = this.game.island.spawnPoint.x+0.5
-        this.y = this.game.island.spawnPoint.y+0.5
-
-        this.speed = 0.0075
-    }
-}

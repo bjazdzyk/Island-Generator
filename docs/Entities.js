@@ -38,7 +38,6 @@ export class MobManager{
         }
 
         this.summon(this.mobSpawn[0], x, y)
-        console.log(x, y)
     }
     summon(mob, x, y){
         if(mob == 'boar'){

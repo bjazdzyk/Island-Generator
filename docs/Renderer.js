@@ -168,6 +168,9 @@ export class Renderer{
             }
         }
 
+        //hearts
+        this.game.player.drawHearts(ctx)
+
 
 
     }

@@ -61,5 +61,15 @@
     },
     "berryBush": {
         "url": "/imgs/berryBush.png"
+    },
+    "berriesItem":{
+        "url": "/imgs/berriesItem.png"
+    },
+    "heartEmpty":{
+        "url": "/imgs/heartEmpty.png"
+    },
+    "heartRed":{
+        "url": "/imgs/heartRed.png"
     }
+
 }
