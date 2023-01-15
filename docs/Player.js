@@ -6,7 +6,7 @@ export class Player{
         this.x = this.game.island.spawnPoint.x+0.5
         this.y = this.game.island.spawnPoint.y+0.5
 
-        this.speed = 0.0075
+        this.speed = 0.005
 
         this.maxHp = 5
         this.hp = 3.5
