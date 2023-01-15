@@ -6,9 +6,6 @@ export class Inventory{
 
         this.guiOpen = false
 
-        this.leftHand = 0
-        this.rightHand = 0
-
         this.rows = 2
         this.cols = 5
 

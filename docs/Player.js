@@ -9,7 +9,7 @@ export class Player{
         this.speed = 0.0075
 
         this.maxHp = 5
-        this.hp = 3.9
+        this.hp = 3.5
     }
     drawHearts(ctx){
 
@@ -17,11 +17,12 @@ export class Player{
 
         const _hs = _H/15
 
+
         for(let i=1; i<=this.hp; i++){
             ctx.drawImage(this.game.assets.heartRed, (i-1)*_hs, 0, _hs, _hs)
         }
-        if(this.hp%1 >= 0.5){
-            ctx.drawImage(this.game.assets.heartRed, 0, 0, 5, 10, Math.floor(this.hp)*_hs, 0, _hs/2, _hs)
+        if(this.hp%1 > 0){
+            ctx.drawImage(this.game.assets.heartRed, 0, 0, 5, 10, Math.ceil(this.hp-1)*_hs, 0, _hs/2, _hs)
         }
 
         for(let i=1; i<=this.maxHp; i++){

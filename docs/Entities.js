@@ -118,7 +118,7 @@ class Boar{
 
                 //const myH = this.H[strCoords(Math.round(this.x), Math.round(this.y))]
 
-                let bestHVal = -10
+                let bestHVal = 1000
                 let bestTX = 0
                 let bestTY = 0
 
@@ -130,8 +130,8 @@ class Boar{
                     const _y = Math.round(this.y + tY)
 
                     const h = this.H[strCoords(_x, _y)]
-                    if( h  > bestHVal){
-                        bestHVal = Math.abs( h )
+                    if( Math.abs(h - 3.5)  < bestHVal){
+                        bestHVal = Math.abs(h - 3.5)
 
                         bestTX = _x
                         bestTY = _y
