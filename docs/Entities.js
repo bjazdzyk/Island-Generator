@@ -65,6 +65,8 @@ class Boar{
         this.maxHp = 15
         this.hp = this.maxHp
 
+        this.damage = 2
+
         this.x = x
         this.y = y
 
@@ -84,6 +86,9 @@ class Boar{
 
         this.maxVel = 0.001
         this.runningSpeed = 0.001
+
+        this.punchTimeStamp = 0
+        this.punchDelay = 1000
 
         this.H = this.entityManager.game.island.H
 
@@ -114,7 +119,6 @@ class Boar{
             if(this.attitude == 'angry'){
                 this.accX = (_dx/_d || 0) * this.maxVel * cellSize
                 this.accY = (_dy/_d || 0) * this.maxVel * cellSize
-                console.log(this.accX, this.accY)
 
                 this.dirX = (this.dirX + this.accX)/2
                 this.dirY = (this.dirY + this.accY)/2
@@ -124,6 +128,19 @@ class Boar{
                 }else{
                     this.flip = 'LEFT'
                 }
+
+                if(_d < 1.5){
+                    if(Date.now()-this.punchTimeStamp >= this.punchDelay){
+                        this.entityManager.game.player.hit(this.damage)
+                        this.punchTimeStamp = Date.now()
+
+                        this.duration = Math.random()*2000
+                        this.timeStamp = this.time
+
+                        this.state = 'waiting'
+                    }
+                }
+
             }else if(Math.sqrt(this.dirX*this.dirX + this.dirY*this.dirY) < this.maxVel/2*cellSize){
                 this.dirX += this.accX
                 this.dirY += this.accY
@@ -157,7 +174,6 @@ class Boar{
 
                     this.duration = Math.random()*5000+1000
                     this.timeStamp = this.time
-
 
                     this.state = 'running'
 

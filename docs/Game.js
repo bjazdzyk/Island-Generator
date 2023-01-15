@@ -60,6 +60,7 @@ export default class Game{
     loop(time){
         let delta = Date.now() - time
 
+        this.player.update(delta)
         this.dayCycle.update(delta)
         this.mobManager.update(delta)
         this.renderer.update()
@@ -115,7 +116,7 @@ export default class Game{
                 const tree = this.island.trees[strCoords(x, y)]
                 
                 const _b = Math.floor((e.button+2)/2)
-                console.log(this.player.hp)
+
                 if(_b, this.inventory.eq[_b].id == 9){//eat berries
                     if(this.player.hp != this.player.maxHp){
                         this.player.hp = Math.min(this.player.hp+1, this.player.maxHp)

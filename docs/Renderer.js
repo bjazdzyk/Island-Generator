@@ -171,6 +171,8 @@ export class Renderer{
         //hearts
         this.game.player.drawHearts(ctx)
 
+        this.game.player.damageGradient(ctx, this._W, this._H)
+
 
 
     }
